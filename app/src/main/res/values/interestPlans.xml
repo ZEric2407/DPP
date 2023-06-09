@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="interestPlans">
+        <item>Simple Interest</item>
+        <item>Annually Compounded Interest</item>
+        <item>Monthly Compounded Interest</item>
+        <item>Weekly Compounded Interest</item>
+        <item>Daily Compounded Interest</item>
+        <item>Continuously Compounded Interest</item>
+    </string-array>
+</resources>
