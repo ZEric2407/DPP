@@ -3,6 +3,7 @@ package com.example.dpp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Spinner interestPlan;
     EditText initialDate;
     Calendar initialDateObj = Calendar.getInstance();
+    static AccountList accounts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,11 +109,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         confirmButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                Toast.makeText(getBaseContext(), nameInput.getText().toString(), Toast.LENGTH_SHORT).show();
+
+                String name;
+                int discRate;
+                double debt;
+
+                if (nameInput.getText().toString().equals("")){
+                    Toast.makeText(getBaseContext(), "Invalid Name", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                name = nameInput.getText().toString();
+
+                try {
+                    discRate = Integer.parseInt(interestRate.getText().toString());
+                } catch (NumberFormatException e){
+                    discRate = 0;
+                }
+
+                try {
+                    debt = Double.parseDouble(startingDebt.getText().toString());
+                } catch (NumberFormatException e){
+                    debt = 0;
+                }
+
+                accounts.addNode(new Account(name));
+
+                switch (interestPlan.getSelectedItem().toString()){
+                    case "Simple Interest":
+                        //TODO
+                        break;
+                    case "Annually Compounded Interest":
+                        initialDateObj.add(Calendar.YEAR, 1);
+                        accounts.findAccount(name).setInterestPlan(new AnnualInterest(discRate, debt, initialDateObj));
+                        break;
+                    case "Monthly Compounded Interest":
+                        //TODO
+                        break;
+                    case "Weekly Compounded Interest":
+                        //TODO
+                        break;
+                    case "Daily Compounded Interest":
+                        //TODO
+                        break;
+                    case "Continuously Compounded Interest":
+                        break;
+                }
+                Intent toAccount = new Intent(getBaseContext(), AccountActivity.class);
+                startActivity(toAccount);
             }
         });
+
+        loadAccounts();
+
+    }
+    private void loadAccounts(){
+        accounts = new AccountList();
     }
 
 }

@@ -3,19 +3,30 @@ package com.example.dpp;
 import java.util.Calendar;
 
 public abstract class Interest {
-    protected int debt;
+    protected double debt;
     protected Calendar prevPayment;
     protected int discRate;
     protected Calendar pmtDue;
 
-    public abstract int updateDebt();
+    public double getDebt(){
+        return debt;
+    }
+
+    public int getDiscRate(){
+        return discRate;
+    }
+
+    public Calendar getPmtDue(){
+        return pmtDue;
+    }
+    public abstract double updateDebt();
 
     public void setPmtDue(Calendar date){
         this.pmtDue = date;
     }
     public abstract void updatePmtDue();
 
-    public int addDebt(int amt) {
+    public double addDebt(int amt) {
         try {
             debt += amt;
         } catch (NullPointerException e){
@@ -24,7 +35,7 @@ public abstract class Interest {
         return debt;
     }
 
-    public int makePayment(int amt){
+    public double makePayment(int amt){
         updateDebt();
         debt -= amt;
         if (debt < 0){
@@ -42,7 +53,7 @@ public abstract class Interest {
         if (discRate == 0){
             return debt / years;
         }
-        return debt * (1 - Math.pow((1 + this.discRate), -years)) / discRate;
+        return debt * (discRate / 100.0) / (1 - Math.pow(1 + discRate / 100.0, -years));
     }
 
 }

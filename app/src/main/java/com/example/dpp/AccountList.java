@@ -26,8 +26,18 @@ public class AccountList {
         return size;
     }
 
+    public Account findAccount(String name){
+        AccountNode currentNode = head;
+        for (int i = 0; i < size; i++){
+            if (currentNode.elmt.name.equals(name)){
+                return currentNode.elmt;
+            }
+            currentNode = currentNode.next;
+        }
+        return null;
+    }
     public boolean addNode(Account acnt){
-        if (size > sizeLimit && size != -1){
+        if (size > sizeLimit && sizeLimit != -1){
             return false;
         }
         if (size == 0){
@@ -43,7 +53,7 @@ public class AccountList {
         return true;
     }
 
-    public AccountNode deleteNode(Account acnt){
+    public Account deleteNode(Account acnt){
         AccountNode currentNode = head;
         for (int i = 0; i < size; i++){
             if (currentNode.equals(acnt)){
@@ -58,7 +68,7 @@ public class AccountList {
                     tail.next = null;
                 }
                 size--;
-                return currentNode;
+                return currentNode.elmt;
             }
             currentNode = currentNode.next;
         }
@@ -83,6 +93,10 @@ public class AccountList {
         size = 0;
 
         return true;
+    }
+
+    public Account retrieveLast(){
+        return tail.elmt;
     }
 
 }
