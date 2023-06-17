@@ -139,7 +139,8 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (interestPlan.getSelectedItem().toString()){
                     case "Simple Interest":
-                        //TODO
+                        initialDateObj.add(Calendar.YEAR, 1);
+                        accounts.findAccount(name).setInterestPlan(new SimpleInterest(discRate, debt, initialDateObj));
                         break;
                     case "Annually Compounded Interest":
                         initialDateObj.add(Calendar.YEAR, 1);

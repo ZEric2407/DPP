@@ -24,7 +24,7 @@ public abstract class Interest {
     public void setPmtDue(Calendar date){
         this.pmtDue = date;
     }
-    public abstract void updatePmtDue();
+    public abstract void updateDebtAndPmtDue();
 
     public double addDebt(int amt) {
         try {
@@ -49,11 +49,6 @@ public abstract class Interest {
         return discRate;
     }
 
-    public double getAnnuity(int years){
-        if (discRate == 0){
-            return debt / years;
-        }
-        return debt * (discRate / 100.0) / (1 - Math.pow(1 + discRate / 100.0, -years));
-    }
+    public abstract double getAnnuity(int years);
 
 }

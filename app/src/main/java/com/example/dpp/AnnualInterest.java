@@ -9,7 +9,7 @@ public class AnnualInterest extends com.example.dpp.Interest {
         this.pmtDue = pmtDate;
     }
 
-    public void updatePmtDue(){
+    public void updateDebtAndPmtDue(){
         Calendar today = Calendar.getInstance();
         Calendar newPmtDue = (Calendar) pmtDue.clone();
         while (today.compareTo(newPmtDue) >= 0) {
@@ -27,5 +27,11 @@ public class AnnualInterest extends com.example.dpp.Interest {
         return debt;
     }
 
-
+    @Override
+    public double getAnnuity(int years){
+        if (discRate == 0){
+            return debt / years;
+        }
+        return debt * (discRate / 100.0) / (1 - Math.pow(1 + discRate / 100.0, -years));
+    }
 }

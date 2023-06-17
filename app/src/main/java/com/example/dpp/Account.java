@@ -2,7 +2,6 @@ package com.example.dpp;
 
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class Account {
     String name;
@@ -22,7 +21,7 @@ public class Account {
     }
 
     public double updateAccount(){
-        interestPlan.updatePmtDue();
+        interestPlan.updateDebtAndPmtDue();
         return interestPlan.debt;
     }
 }
