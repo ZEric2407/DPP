@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -158,6 +159,12 @@ public class MainActivity extends AppCompatActivity {
                     case "Continuously Compounded Interest":
                         break;
                 }
+
+                SharedPreferences sharedPreference = getSharedPreferences("Account", MODE_PRIVATE);
+                SharedPreferences.Editor SPEditor = sharedPreference.edit();
+                SPEditor.putString("name", name);
+                SPEditor.commit();
+
                 Intent toAccount = new Intent(getBaseContext(), AccountActivity.class);
                 startActivity(toAccount);
             }

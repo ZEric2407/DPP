@@ -1,5 +1,6 @@
 package com.example.dpp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -21,10 +23,9 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class AccountActivity extends AppCompatActivity {
-    Account currAccount;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle drawerToggle;
-    private static final DecimalFormat df = new DecimalFormat("0.00");
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,16 +36,20 @@ public class AccountActivity extends AppCompatActivity {
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
                 switch (item.getItemId()){
                     case R.id.CashFlow:
-                        //TODO
-                        Toast.makeText(AccountActivity.this, "Cash Flow", Toast.LENGTH_SHORT).show();
+                        fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, AccountCFFragment.class, null).setReorderingAllowed(true).
+                                addToBackStack("name").commit();
                         break;
                     case R.id.NPVHistory:
                         //TODO
                         Toast.makeText(AccountActivity.this, "Debt History", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.MainDebtPage:
+                        fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, AccountMainFragment.class, null).setReorderingAllowed(true).
+                                addToBackStack("name").commit();
                         break;
                     case R.id.Simulation:
                         //TODO
@@ -65,24 +70,6 @@ public class AccountActivity extends AppCompatActivity {
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerToggle.syncState();
 
-        currAccount = MainActivity.accounts.retrieveLast(); //TEMP; TODO
-        currAccount.updateAccount();
-
-        ((TextView) findViewById(R.id.accName)).setText(currAccount.name);
-
-        String debt = "Debt: $" + df.format(currAccount.interestPlan.getDebt());
-        ((TextView) findViewById(R.id.accDebt)).setText(debt);
-
-        String format = "dd/MM/yyyy";
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.CANADA);
-        String pmtDue = "Next Payment: " + sdf.format(currAccount.interestPlan.getPmtDue().getTime());
-        ((TextView) findViewById(R.id.accNextPayment)).setText(pmtDue);
-
-        String interest = "Nominal Annual Interest Rate: " + Integer.toString(currAccount.interestPlan.getDiscRate()) + "%";
-        ((TextView) findViewById(R.id.accInterestRate)).setText(interest);
-
-        String annuity = "Annuity: $" + df.format(currAccount.interestPlan.getAnnuity(5)) + "/Year over 5 years";
-        ((TextView) findViewById(R.id.accAnnuity)).setText(annuity);
     }
 
     @Override

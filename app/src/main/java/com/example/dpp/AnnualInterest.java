@@ -7,6 +7,8 @@ public class AnnualInterest extends com.example.dpp.Interest {
         this.discRate = discRate;
         this.debt = initialDebt;
         this.pmtDue = pmtDate;
+        this.debtStart = (Calendar) pmtDate.clone();
+        this.debtStart.add(Calendar.YEAR, -1);
     }
 
     public void updateDebtAndPmtDue(){
@@ -33,5 +35,18 @@ public class AnnualInterest extends com.example.dpp.Interest {
             return debt / years;
         }
         return debt * (discRate / 100.0) / (1 - Math.pow(1 + discRate / 100.0, -years));
+    }
+
+    public double declareCF(double amt, Calendar date){
+        Calendar CFDate = (Calendar) date.clone();
+        Calendar lastPayment = (Calendar) pmtDue.clone();
+        lastPayment.add(Calendar.YEAR, -1);
+        int count = 0;
+        while (CFDate.compareTo(lastPayment) <= 0){
+            CFDate.add(Calendar.YEAR, 1);
+            count++;
+        }
+        debt += amt * (Math.pow(1 + discRate/100.00, count));
+        return debt;
     }
 }

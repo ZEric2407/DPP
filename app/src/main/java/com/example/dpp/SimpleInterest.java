@@ -31,4 +31,18 @@ public class SimpleInterest extends Interest{
     public double getAnnuity(int years) {
         return debt/years;
     }
+
+    @Override
+    public double declareCF(double amt, Calendar date) {
+        Calendar CFDate = (Calendar) date.clone();
+        Calendar lastPayment = (Calendar) pmtDue.clone();
+        lastPayment.add(Calendar.YEAR, -1);
+        int count = 0;
+        while (CFDate.compareTo(lastPayment) <= 0){
+            CFDate.add(Calendar.YEAR, 1);
+            count++;
+        }
+        debt += amt * discRate/100.00 * count;
+        return debt;
+    }
 }

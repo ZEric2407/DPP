@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 public abstract class Interest {
     protected double debt;
-    protected Calendar prevPayment;
+    protected Calendar debtStart;
     protected int discRate;
     protected Calendar pmtDue;
 
@@ -50,5 +50,7 @@ public abstract class Interest {
     }
 
     public abstract double getAnnuity(int years);
+
+    public abstract double declareCF(double amt, Calendar date);
 
 }
