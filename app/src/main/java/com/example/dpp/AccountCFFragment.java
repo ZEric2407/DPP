@@ -91,6 +91,7 @@ public class AccountCFFragment extends Fragment {
         currAccount.interestPlan.declareCF(amt, CFDate);
         Toast.makeText(this.getActivity(), "Cashflow Registered! New Debt: " +
                 currAccount.interestPlan.getDebt(), Toast.LENGTH_SHORT).show();
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
