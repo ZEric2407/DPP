@@ -174,7 +174,7 @@ public class NewAccount extends Fragment {
                 int discRate;
                 double debt;
 
-                if (nameInput.getText().toString().equals("")){
+                if (nameInput.getText().toString().equals("") || MainActivity.accounts.accExists(nameInput.getText().toString())){
                     Toast.makeText(getActivity(), "Invalid Name", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -226,9 +226,5 @@ public class NewAccount extends Fragment {
             }
         });
 
-        loadAccounts();
-    }
-    private void loadAccounts(){
-        MainActivity.accounts = new AccountList();
     }
 }

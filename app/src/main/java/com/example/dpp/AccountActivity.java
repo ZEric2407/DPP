@@ -1,13 +1,11 @@
 package com.example.dpp;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -16,11 +14,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
-
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
 
 public class AccountActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
@@ -51,9 +44,9 @@ public class AccountActivity extends AppCompatActivity {
                         fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, AccountMainFragment.class, null).setReorderingAllowed(true).
                                 addToBackStack("name").commit();
                         break;
-                    case R.id.Simulation:
-                        //TODO
-                        Toast.makeText(AccountActivity.this, "Debt Payment Simulation", Toast.LENGTH_SHORT).show();
+                    case R.id.ReturnMenu:
+                        Intent toAccount = new Intent(AccountActivity.this, MainActivity.class);
+                        startActivity(toAccount);
                         break;
                 }
                 drawerLayout.close();

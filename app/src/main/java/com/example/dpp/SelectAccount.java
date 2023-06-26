@@ -1,19 +1,31 @@
 package com.example.dpp;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SelectAccount#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SelectAccount extends Fragment {
+public class SelectAccount extends Fragment implements RecyclerViewInterface {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,6 +35,10 @@ public class SelectAccount extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    // Custom Fields
+    private RecyclerView list;
+    private ArrayList<AccountRecyclerModel> accModels;
 
     public SelectAccount() {
         // Required empty public constructor
@@ -53,6 +69,23 @@ public class SelectAccount extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        if (!MainActivity.accounts.accExists("Joe")) {
+            Account test = new Account("Joe");
+            test.interestPlan = new AnnualInterest(15, 200.00, Calendar.getInstance());
+            MainActivity.accounts.addNode(test);
+        }
+
+        try {
+            accModels = new ArrayList<AccountRecyclerModel>();
+            ArrayList<Account> accs = MainActivity.accounts.retrieveAll();
+            for (int i = 0; i < accs.size(); i++) {
+                accModels.add(new AccountRecyclerModel(accs.get(i).name, accs.get(i).interestPlan.getDebt()));
+            }
+        } catch (NullPointerException e) {
+            FragmentManager fragmentManager = getParentFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.fragmentContainerView3, NewAccount.class, null).setReorderingAllowed(true).
+                    addToBackStack("name").commit();
+        }
     }
 
     @Override
@@ -60,5 +93,36 @@ public class SelectAccount extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_select_account, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        list = (RecyclerView) getView().findViewById(R.id.accountList);
+        AccountListRecyclerViewAdapter adapter = new AccountListRecyclerViewAdapter(getContext(), accModels, this);
+        list.setAdapter(adapter);
+        list.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        ImageButton addAcc = ((ImageButton) getView().findViewById(R.id.addAccount));
+        addAcc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.fragmentContainerView3, NewAccount.class, null).setReorderingAllowed(true).
+                        addToBackStack("name").commit();
+            }
+        });
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        SharedPreferences sharedPreference = getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
+        SharedPreferences.Editor SPEditor = sharedPreference.edit();
+        SPEditor.putString("name", accModels.get(position).getName());
+        SPEditor.commit();
+
+        Intent toAccount = new Intent(getActivity(), AccountActivity.class);
+        startActivity(toAccount);
     }
 }

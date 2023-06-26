@@ -10,6 +10,6 @@
         android:id="@+id/NPVHistory"
         android:title="View Debt History"/>
     <item
-        android:id="@+id/Simulation"
-        android:title="Payment Simulation"/>
+        android:id="@+id/ReturnMenu"
+        android:title="Return to Account List"/>
 </menu>

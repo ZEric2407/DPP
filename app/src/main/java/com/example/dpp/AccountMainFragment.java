@@ -36,7 +36,7 @@ public class AccountMainFragment extends Fragment {
     // Custom Fields
     Account currAccount;
 
-    private static final DecimalFormat df = new DecimalFormat("0.00");
+    public static final DecimalFormat df = new DecimalFormat("0.00");
     public AccountMainFragment() {
         // Required empty public constructor
     }

@@ -1,5 +1,7 @@
 package com.example.dpp;
 
+import java.util.ArrayList;
+
 public class AccountList {
     private int size;
     private AccountNode head;
@@ -36,6 +38,20 @@ public class AccountList {
         }
         return null;
     }
+
+    public boolean accExists(String name){
+        return findAccount(name) != null;
+    }
+
+    public ArrayList<Account> retrieveAll(){
+        ArrayList<Account> lst = new ArrayList<>();
+        AccountNode currNode = head;
+        for (int i = 0; i < getSize(); i++){
+            lst.add(currNode.elmt);
+            currNode = currNode.next;
+        }
+        return lst;
+    }
     public boolean addNode(Account acnt){
         if (size > sizeLimit && sizeLimit != -1){
             return false;
@@ -53,10 +69,10 @@ public class AccountList {
         return true;
     }
 
-    public Account deleteNode(Account acnt){
+    public Account deleteNode(String name){
         AccountNode currentNode = head;
         for (int i = 0; i < size; i++){
-            if (currentNode.equals(acnt)){
+            if (currentNode.elmt.name.equals(name)){
                 if (size == 1){
                     head = null;
                     tail = null;
