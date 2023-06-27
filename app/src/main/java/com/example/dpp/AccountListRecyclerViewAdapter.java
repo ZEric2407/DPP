@@ -1,11 +1,14 @@
 package com.example.dpp;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -62,6 +65,17 @@ public class AccountListRecyclerViewAdapter extends RecyclerView.Adapter<Account
                         int pos = getAdapterPosition();
                         if (pos != RecyclerView.NO_POSITION){
                             recyclerViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (recyclerViewInterface != null){
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION){
+                            recyclerViewInterface.askConfirmation(pos);
                         }
                     }
                 }

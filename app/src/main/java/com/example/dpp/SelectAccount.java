@@ -12,10 +12,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +43,7 @@ public class SelectAccount extends Fragment implements RecyclerViewInterface {
     // Custom Fields
     private RecyclerView list;
     private ArrayList<AccountRecyclerModel> accModels;
+    private AccountListRecyclerViewAdapter adapter;
 
     public SelectAccount() {
         // Required empty public constructor
@@ -100,7 +105,7 @@ public class SelectAccount extends Fragment implements RecyclerViewInterface {
         super.onViewCreated(view, savedInstanceState);
 
         list = (RecyclerView) getView().findViewById(R.id.accountList);
-        AccountListRecyclerViewAdapter adapter = new AccountListRecyclerViewAdapter(getContext(), accModels, this);
+        adapter = new AccountListRecyclerViewAdapter(getContext(), accModels, this);
         list.setAdapter(adapter);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -124,5 +129,34 @@ public class SelectAccount extends Fragment implements RecyclerViewInterface {
 
         Intent toAccount = new Intent(getActivity(), AccountActivity.class);
         startActivity(toAccount);
+    }
+
+    public void askConfirmation(int position){
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.confirm_delete, null);
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true;
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+
+        Button cancel = popupView.findViewById(R.id.cancelDelete);
+        Button confirm = popupView.findViewById(R.id.confirmDelete);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.accounts.deleteNode(accModels.get(position).getName());
+                accModels.remove(position);
+                adapter.notifyItemRemoved(position);
+                popupWindow.dismiss();
+            }
+        });
     }
 }
