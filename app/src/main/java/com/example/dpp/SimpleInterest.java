@@ -42,7 +42,7 @@ public class SimpleInterest extends Interest{
             CFDate.add(Calendar.YEAR, 1);
             count++;
         }
-        debt += amt * discRate/100.00 * count;
+        debt += amt + amt * discRate/100.00 * count;
         return debt;
     }
 
