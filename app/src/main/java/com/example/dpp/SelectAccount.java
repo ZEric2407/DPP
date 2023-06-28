@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -74,11 +75,21 @@ public class SelectAccount extends Fragment implements RecyclerViewInterface {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        if (!MainActivity.accounts.accExists("Joe")) {
-            Account test = new Account("Joe");
-            test.interestPlan = new AnnualInterest(15, 200.00, Calendar.getInstance());
-            MainActivity.accounts.addNode(test);
+
+        DBHelper dbHelper = new DBHelper(getActivity());
+        if (MainActivity.accounts.getSize() == 0){
+            try {
+                MainActivity.retrieveAccounts(dbHelper);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
+//
+//        if (!MainActivity.accounts.accExists("Joe")) {
+//            Account test = new Account("Joe");
+//            test.interestPlan = new AnnualInterest(15, 200.00, Calendar.getInstance());
+//            MainActivity.accounts.addNode(test);
+//        }
 
         try {
             accModels = new ArrayList<AccountRecyclerModel>();
@@ -152,6 +163,9 @@ public class SelectAccount extends Fragment implements RecyclerViewInterface {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DBHelper dbHelper = new DBHelper(getActivity());
+                dbHelper.deleteRow(accModels.get(position).getName());
+
                 MainActivity.accounts.deleteNode(accModels.get(position).getName());
                 accModels.remove(position);
                 adapter.notifyItemRemoved(position);

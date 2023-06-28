@@ -18,7 +18,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -30,10 +32,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.fragmentContainerView3, SelectAccount.class, null).setReorderingAllowed(true).
-//                addToBackStack("name").commit();
 
+
+    }
+
+    public static void retrieveAccounts(DBHelper dbHelper) throws ParseException {
+        ArrayList<Account> accs = dbHelper.retrieveAllAccounts();
+        for (int i = 0; i < accs.size(); i++){
+            accounts.addNode(accs.get(i));
+        }
     }
 
 }

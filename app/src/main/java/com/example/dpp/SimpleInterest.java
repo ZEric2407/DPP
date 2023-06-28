@@ -45,4 +45,8 @@ public class SimpleInterest extends Interest{
         debt += amt * discRate/100.00 * count;
         return debt;
     }
+
+    public String getInterestPlan(){
+        return "Simple Interest";
+    }
 }

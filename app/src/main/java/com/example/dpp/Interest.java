@@ -52,5 +52,6 @@ public abstract class Interest {
     public abstract double getAnnuity(int years);
 
     public abstract double declareCF(double amt, Calendar date);
+    public abstract String getInterestPlan();
 
 }

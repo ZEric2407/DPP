@@ -24,4 +24,8 @@ public class Account {
         interestPlan.updateDebtAndPmtDue();
         return interestPlan.debt;
     }
+
+    public String getName(){
+        return name;
+    }
 }

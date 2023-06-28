@@ -49,4 +49,8 @@ public class AnnualInterest extends com.example.dpp.Interest {
         debt += amt * (Math.pow(1 + discRate/100.00, count));
         return debt;
     }
+
+    public String getInterestPlan(){
+        return "Annual Interest";
+    }
 }

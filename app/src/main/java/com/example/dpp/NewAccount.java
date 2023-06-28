@@ -216,6 +216,9 @@ public class NewAccount extends Fragment {
                         break;
                 }
 
+                DBHelper dbHelper = new DBHelper(getActivity());
+                dbHelper.writeRow(MainActivity.accounts.findAccount(name));
+
                 SharedPreferences sharedPreference = getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
                 SharedPreferences.Editor SPEditor = sharedPreference.edit();
                 SPEditor.putString("name", name);

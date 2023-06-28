@@ -72,6 +72,10 @@ public class AccountMainFragment extends Fragment {
         currAccount = MainActivity.accounts.findAccount(sharedPreference.getString("name", ""));
         currAccount.updateAccount();
 
+        DBHelper dbHelper = new DBHelper(getActivity());
+        dbHelper.updateRow(currAccount.getName(), currAccount.interestPlan.getDebt());
+        dbHelper.updateRow(currAccount.getName(), currAccount.interestPlan.getPmtDue());
+
     }
 
     @Override

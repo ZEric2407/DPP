@@ -51,7 +51,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/accDebt"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.050000012" />
 
         <TextView
             android:id="@+id/accInterestRate"
@@ -64,7 +64,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/accNextPayment"
-            app:layout_constraintVertical_bias="0.32999998" />
+            app:layout_constraintVertical_bias="0.3" />
 
         <TextView
             android:id="@+id/accAnnuity"
