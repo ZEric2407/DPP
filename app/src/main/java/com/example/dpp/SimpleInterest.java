@@ -2,17 +2,21 @@ package com.example.dpp;
 import java.util.Calendar;
 
 public class SimpleInterest extends Interest{
-    private double initDebt;
 
-    public SimpleInterest(int discRate, double initialDebt, Calendar pmtDate){
+    public SimpleInterest(int discRate, double debt, Calendar pmtDate, double initialDebt){
         this.discRate = discRate;
-        this.debt = initialDebt;
-        this.initDebt = initialDebt;
+        this.debt = debt;
         this.pmtDue = pmtDate;
+
+        if (initialDebt == -1){
+            this.initialDebt = debt;
+        } else {
+            this.initialDebt = initialDebt;
+        }
     }
     @Override
     public double updateDebt() {
-        debt += initDebt * (discRate/100.0);
+        debt += initialDebt * (discRate/100.0);
         return debt;
     }
 

@@ -23,7 +23,6 @@ import android.widget.PopupWindow;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -76,10 +75,10 @@ public class SelectAccount extends Fragment implements RecyclerViewInterface {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        DBHelper dbHelper = new DBHelper(getActivity());
+        DBAccHelper dbAccHelper = new DBAccHelper(getActivity());
         if (MainActivity.accounts.getSize() == 0){
             try {
-                MainActivity.retrieveAccounts(dbHelper);
+                MainActivity.retrieveAccounts(dbAccHelper);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -163,8 +162,8 @@ public class SelectAccount extends Fragment implements RecyclerViewInterface {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBHelper dbHelper = new DBHelper(getActivity());
-                dbHelper.deleteRow(accModels.get(position).getName());
+                DBAccHelper dbAccHelper = new DBAccHelper(getActivity());
+                dbAccHelper.deleteRow(accModels.get(position).getName());
 
                 MainActivity.accounts.deleteNode(accModels.get(position).getName());
                 accModels.remove(position);

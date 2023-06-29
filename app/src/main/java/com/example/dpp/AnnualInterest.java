@@ -1,14 +1,21 @@
 package com.example.dpp;
 
+import androidx.annotation.Nullable;
+
 import java.util.Calendar;
 
 public class AnnualInterest extends com.example.dpp.Interest {
-    public AnnualInterest(int discRate, double initialDebt, Calendar pmtDate){
+    public AnnualInterest(int discRate, double debt, Calendar pmtDate, double initialDebt){
         this.discRate = discRate;
-        this.debt = initialDebt;
+        this.debt = debt;
         this.pmtDue = pmtDate;
         this.debtStart = (Calendar) pmtDate.clone();
         this.debtStart.add(Calendar.YEAR, -1);
+        if (initialDebt == -1){
+            this.initialDebt = debt;
+        } else {
+            this.initialDebt = initialDebt;
+        }
     }
 
     public void updateDebtAndPmtDue(){

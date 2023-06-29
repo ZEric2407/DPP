@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Calendar;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccountCharts#newInstance} factory method to
@@ -61,4 +63,5 @@ public class AccountCharts extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_account_charts, container, false);
     }
+
 }

@@ -4,10 +4,14 @@ import java.util.Calendar;
 
 public abstract class Interest {
     protected double debt;
+    protected double initialDebt;
     protected Calendar debtStart;
     protected int discRate;
     protected Calendar pmtDue;
 
+    public double getInitialDebt(){
+        return initialDebt;
+    }
     public double getDebt(){
         return debt;
     }

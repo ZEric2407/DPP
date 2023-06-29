@@ -89,8 +89,8 @@ public class AccountCFFragment extends Fragment {
             amt *= -1;
         }
         currAccount.interestPlan.declareCF(amt, CFDate);
-        DBHelper dbHelper = new DBHelper(getActivity());
-        dbHelper.updateRow(currAccount.getName(), currAccount.interestPlan.getDebt());
+        DBAccHelper dbAccHelper = new DBAccHelper(getActivity());
+        dbAccHelper.updateRow(currAccount.getName(), currAccount.interestPlan.getDebt());
         Toast.makeText(this.getActivity(), "Cashflow Registered! New Debt: " +
                 AccountMainFragment.df.format(currAccount.interestPlan.getDebt()), Toast.LENGTH_SHORT).show();
 

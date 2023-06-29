@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class DBHelper extends SQLiteOpenHelper {
+public class DBAccHelper extends SQLiteOpenHelper {
 
     private static final String account_table = "Accounts";
     private static final String account_ID = "Account_ID";
@@ -23,8 +23,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String debt = "Debt";
     private static final String rate = "Discount_Rate";
     private static final String pmt_due = "Payment_Due_Date";
+    private static final String init_debt = "Initial_Debt";
 
-    public DBHelper(@Nullable Context context) {
+    public DBAccHelper(@Nullable Context context) {
         super(context, "accounts.db", null, 1);
     }
 
@@ -32,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String CreateQuery = "CREATE TABLE " + account_table + "( " + account_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + account_name + " TEXT, " + interest_plan + " TEXT, " + debt + " REAL, " +
-                rate + " INTEGER, " + pmt_due + " TEXT )";
+                rate + " INTEGER, " + pmt_due + " TEXT, " + init_debt + " REAL) ";
         sqLiteDatabase.execSQL(CreateQuery);
     }
 
@@ -53,6 +54,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(debt, acc.interestPlan.getDebt());
         cv.put(rate, acc.interestPlan.getDiscRate());
         cv.put(pmt_due, sdf.format(acc.interestPlan.getPmtDue().getTime()));
+        cv.put(init_debt, acc.interestPlan.getInitialDebt());
 
         long insert = db.insert(account_table, null, cv);
 
@@ -70,7 +72,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 int account_id = cursor.getInt(0);
                 String acc_name = cursor.getString(1);
                 String plan = cursor.getString(2);
-                Double debt = cursor.getDouble(3);
+                double debt = cursor.getDouble(3);
                 int rate = cursor.getInt(4);
 
                 String format = "yyyy-MM-dd hh:mm:ss";
@@ -78,13 +80,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 Calendar pmtDue = Calendar.getInstance();
                 pmtDue.setTime(sdf.parse(cursor.getString(5)));
 
+                double initDebt = cursor.getDouble(6);
+
                 Account newAcc = new Account(acc_name);
                 switch (plan){
                     case "Annual Interest":
-                        newAcc.interestPlan = new AnnualInterest(rate, debt, pmtDue);
+                        newAcc.interestPlan = new AnnualInterest(rate, debt, pmtDue, initDebt);
                         break;
                     case "Simple Interest":
-                        newAcc.interestPlan = new SimpleInterest(rate, debt, pmtDue);
+                        newAcc.interestPlan = new SimpleInterest(rate, debt, pmtDue, initDebt);
                         break;
                     default:
                         throw new IllegalArgumentException("Unimplemented Interest Plan");
