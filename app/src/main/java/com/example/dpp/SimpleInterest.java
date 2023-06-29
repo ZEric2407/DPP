@@ -29,7 +29,7 @@ public class SimpleInterest extends Interest{
 
     @Override
     public double getAnnuity(int years) {
-        return debt/years;
+        return debt * (1 + discRate / 100.00 * years) /years;
     }
 
     @Override

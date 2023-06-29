@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -103,6 +104,25 @@ public class AccountMainFragment extends Fragment {
 
         String annuity = "Annuity: $" + df.format(currAccount.interestPlan.getAnnuity(5)) + "/Year over 5 years";
         ((TextView) getView().findViewById(R.id.accAnnuity)).setText(annuity);
+
+        SeekBar annuitySlider = getView().findViewById(R.id.seekBar);
+        annuitySlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                String annuity = "Annuity: $" + df.format(currAccount.interestPlan.getAnnuity(i + 1)) + "/Year over " + (i + 1) +" years";
+                ((TextView) getView().findViewById(R.id.accAnnuity)).setText(annuity);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         super.onViewCreated(view, savedInstanceState);
     }
