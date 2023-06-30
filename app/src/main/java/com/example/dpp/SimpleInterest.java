@@ -1,10 +1,13 @@
 package com.example.dpp;
+import android.content.Context;
+
 import java.util.Calendar;
 
 public class SimpleInterest extends Interest{
 
-    public SimpleInterest(int discRate, double debt, Calendar pmtDate, double initialDebt){
+    public SimpleInterest(String name, int discRate, double debt, Calendar pmtDate, double initialDebt){
         this.discRate = discRate;
+        this.name = name;
         this.debt = debt;
         this.pmtDue = pmtDate;
 
@@ -15,20 +18,24 @@ public class SimpleInterest extends Interest{
         }
     }
     @Override
-    public double updateDebt() {
+    public double updateDebt(Context context) {
+        double interest = initialDebt * (discRate/100.0);
         debt += initialDebt * (discRate/100.0);
+        DBCFHelper dbcfHelper = new DBCFHelper(null);
+        dbcfHelper.writeRow(name, interest, debt, pmtDue, true);
+
         return debt;
     }
 
     @Override
-    public void updateDebtAndPmtDue() {
+    public void updateDebtAndPmtDue(Context context) {
         Calendar today = Calendar.getInstance();
-        Calendar newPmtDue = (Calendar) pmtDue.clone();
-        while (today.compareTo(newPmtDue) >= 0) {
-            updateDebt();
-            newPmtDue.add(Calendar.YEAR, 1);
+//        Calendar newPmtDue = (Calendar) pmtDue.clone();
+        while (today.compareTo(pmtDue) >= 0) {
+            updateDebt(context);
+            pmtDue.add(Calendar.YEAR, 1);
         }
-        pmtDue = newPmtDue;
+//        pmtDue = newPmtDue;
     }
 
     @Override

@@ -35,7 +35,7 @@ public class AccountMainFragment extends Fragment {
     private String mParam2;
 
     // Custom Fields
-    Account currAccount;
+    AccountModel currAccountModel;
 
     public static final DecimalFormat df = new DecimalFormat("0.00");
     public AccountMainFragment() {
@@ -70,12 +70,12 @@ public class AccountMainFragment extends Fragment {
 
 
         SharedPreferences sharedPreference = this.getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
-        currAccount = MainActivity.accounts.findAccount(sharedPreference.getString("name", ""));
-        currAccount.updateAccount();
+        currAccountModel = MainActivity.accounts.findAccount(sharedPreference.getString("name", ""));
+        currAccountModel.updateAccount(getActivity());
 
         DBAccHelper dbAccHelper = new DBAccHelper(getActivity());
-        dbAccHelper.updateRow(currAccount.getName(), currAccount.interestPlan.getDebt());
-        dbAccHelper.updateRow(currAccount.getName(), currAccount.interestPlan.getPmtDue());
+        dbAccHelper.updateRow(currAccountModel.getName(), currAccountModel.interestPlan.getDebt());
+        dbAccHelper.updateRow(currAccountModel.getName(), currAccountModel.interestPlan.getPmtDue());
 
     }
 
@@ -89,27 +89,27 @@ public class AccountMainFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        ((TextView) getView().findViewById(R.id.accName)).setText(currAccount.name);
+        ((TextView) getView().findViewById(R.id.accName)).setText(currAccountModel.name);
 
-        String debt = "Debt: $" + df.format(currAccount.interestPlan.getDebt());
+        String debt = "Debt: $" + df.format(currAccountModel.interestPlan.getDebt());
         ((TextView) getView().findViewById(R.id.accDebt)).setText(debt);
 
         String format = "dd/MM/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.CANADA);
-        String pmtDue = "Next Payment: " + sdf.format(currAccount.interestPlan.getPmtDue().getTime());
+        String pmtDue = "Next Payment: " + sdf.format(currAccountModel.interestPlan.getPmtDue().getTime());
         ((TextView) getView().findViewById(R.id.accNextPayment)).setText(pmtDue);
 
-        String interest = "Nominal Annual Interest Rate: " + Integer.toString(currAccount.interestPlan.getDiscRate()) + "%";
+        String interest = "Nominal Annual Interest Rate: " + Integer.toString(currAccountModel.interestPlan.getDiscRate()) + "%";
         ((TextView) getView().findViewById(R.id.accInterestRate)).setText(interest);
 
-        String annuity = "Annuity: $" + df.format(currAccount.interestPlan.getAnnuity(5)) + "/Year over 5 years";
+        String annuity = "Annuity: $" + df.format(currAccountModel.interestPlan.getAnnuity(5)) + "/Year over 5 years";
         ((TextView) getView().findViewById(R.id.accAnnuity)).setText(annuity);
 
         SeekBar annuitySlider = getView().findViewById(R.id.seekBar);
         annuitySlider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                String annuity = "Annuity: $" + df.format(currAccount.interestPlan.getAnnuity(i + 1)) + "/Year over " + (i + 1) +" years";
+                String annuity = "Annuity: $" + df.format(currAccountModel.interestPlan.getAnnuity(i + 1)) + "/Year over " + (i + 1) +" years";
                 ((TextView) getView().findViewById(R.id.accAnnuity)).setText(annuity);
             }
 

@@ -92,7 +92,7 @@ public class SelectAccount extends Fragment implements RecyclerViewInterface {
 
         try {
             accModels = new ArrayList<AccountRecyclerModel>();
-            ArrayList<Account> accs = MainActivity.accounts.retrieveAll();
+            ArrayList<AccountModel> accs = MainActivity.accounts.retrieveAll();
             for (int i = 0; i < accs.size(); i++) {
                 accModels.add(new AccountRecyclerModel(accs.get(i).name, accs.get(i).interestPlan.getDebt()));
             }
@@ -164,6 +164,8 @@ public class SelectAccount extends Fragment implements RecyclerViewInterface {
             public void onClick(View view) {
                 DBAccHelper dbAccHelper = new DBAccHelper(getActivity());
                 dbAccHelper.deleteRow(accModels.get(position).getName());
+                DBCFHelper dbcfHelper = new DBCFHelper(getActivity());
+                dbcfHelper.deleteAccEntries(accModels.get(position).getName());
 
                 MainActivity.accounts.deleteNode(accModels.get(position).getName());
                 accModels.remove(position);

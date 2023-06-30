@@ -42,7 +42,7 @@ public class AccountCFFragment extends Fragment {
     private String mParam2;
 
     // Customer Fields
-    Account currAccount;
+    AccountModel currAccountModel;
     Button confirmButton;
     TextView CFAmt;
     TextView CFDateBox;
@@ -80,19 +80,26 @@ public class AccountCFFragment extends Fragment {
 
 
         SharedPreferences sharedPreference = this.getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
-        currAccount = MainActivity.accounts.findAccount(sharedPreference.getString("name", ""));
+        currAccountModel = MainActivity.accounts.findAccount(sharedPreference.getString("name", ""));
     }
 
     private void confirmCashFlow(){
         double amt = Double.parseDouble(CFAmt.getText().toString());
+        if (CFDate.compareTo(currAccountModel.interestPlan.getDebtStart()) < 0 ||
+        CFDate.compareTo(Calendar.getInstance()) > 0){
+            Toast.makeText(this.getActivity(), "Invalid Date", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (operation.getSelectedItem().toString().equals("Repaid")){
             amt *= -1;
         }
-        currAccount.interestPlan.declareCF(amt, CFDate);
+        currAccountModel.interestPlan.declareCF(amt, CFDate);
         DBAccHelper dbAccHelper = new DBAccHelper(getActivity());
-        dbAccHelper.updateRow(currAccount.getName(), currAccount.interestPlan.getDebt());
+        dbAccHelper.updateRow(currAccountModel.getName(), currAccountModel.interestPlan.getDebt());
+        DBCFHelper dbcfHelper = new DBCFHelper(getActivity());
+        dbcfHelper.writeRow(currAccountModel.getName(), amt, currAccountModel.interestPlan.getDebt(), CFDate, false);
         Toast.makeText(this.getActivity(), "Cashflow Registered! New Debt: " +
-                AccountMainFragment.df.format(currAccount.interestPlan.getDebt()), Toast.LENGTH_SHORT).show();
+                AccountMainFragment.df.format(currAccountModel.interestPlan.getDebt()), Toast.LENGTH_SHORT).show();
 
     }
     @Override

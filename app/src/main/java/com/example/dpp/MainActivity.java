@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void retrieveAccounts(DBAccHelper dbAccHelper) throws ParseException {
-        ArrayList<Account> accs = dbAccHelper.retrieveAllAccounts();
+        ArrayList<AccountModel> accs = dbAccHelper.retrieveAllAccounts();
         for (int i = 0; i < accs.size(); i++){
             accounts.addNode(accs.get(i));
         }

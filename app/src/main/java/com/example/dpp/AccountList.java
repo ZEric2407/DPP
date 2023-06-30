@@ -9,10 +9,10 @@ public class AccountList {
     private static int sizeLimit = -1;
     private class AccountNode {
         AccountNode next;
-        Account elmt;
+        AccountModel elmt;
         AccountNode prev;
 
-        public AccountNode(Account acnt){
+        public AccountNode(AccountModel acnt){
             elmt = acnt;
         }
     }
@@ -28,7 +28,7 @@ public class AccountList {
         return size;
     }
 
-    public Account findAccount(String name){
+    public AccountModel findAccount(String name){
         AccountNode currentNode = head;
         for (int i = 0; i < size; i++){
             if (currentNode.elmt.name.equals(name)){
@@ -43,8 +43,8 @@ public class AccountList {
         return findAccount(name) != null;
     }
 
-    public ArrayList<Account> retrieveAll(){
-        ArrayList<Account> lst = new ArrayList<>();
+    public ArrayList<AccountModel> retrieveAll(){
+        ArrayList<AccountModel> lst = new ArrayList<>();
         AccountNode currNode = head;
         for (int i = 0; i < getSize(); i++){
             lst.add(currNode.elmt);
@@ -52,7 +52,7 @@ public class AccountList {
         }
         return lst;
     }
-    public boolean addNode(Account acnt){
+    public boolean addNode(AccountModel acnt){
         if (size > sizeLimit && sizeLimit != -1){
             return false;
         }
@@ -69,7 +69,7 @@ public class AccountList {
         return true;
     }
 
-    public Account deleteNode(String name){
+    public AccountModel deleteNode(String name){
         AccountNode currentNode = head;
         for (int i = 0; i < size; i++){
             if (currentNode.elmt.name.equals(name)){
@@ -111,7 +111,7 @@ public class AccountList {
         return true;
     }
 
-    public Account retrieveLast(){
+    public AccountModel retrieveLast(){
         return tail.elmt;
     }
 

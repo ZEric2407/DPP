@@ -30,19 +30,19 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
-
+                fragmentManager.popBackStack();
                 switch (item.getItemId()){
                     case R.id.CashFlow:
                         fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, AccountCFFragment.class, null).setReorderingAllowed(true).
-                                addToBackStack("name").commit();
+                                addToBackStack("CF").commit();
                         break;
                     case R.id.NPVHistory:
-                        //TODO
-                        Toast.makeText(AccountActivity.this, "Debt History", Toast.LENGTH_SHORT).show();
+                        fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, AccountCharts.class, null).setReorderingAllowed(true).
+                                addToBackStack("Graph").commit();
                         break;
                     case R.id.MainDebtPage:
                         fragmentManager.beginTransaction().replace(R.id.fragmentContainerView, AccountMainFragment.class, null).setReorderingAllowed(true).
-                                addToBackStack("name").commit();
+                                addToBackStack("Main").commit();
                         break;
                     case R.id.ReturnMenu:
                         Intent toAccount = new Intent(AccountActivity.this, MainActivity.class);

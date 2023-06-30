@@ -1,12 +1,15 @@
 package com.example.dpp;
 
+import android.content.Context;
+
 import androidx.annotation.Nullable;
 
 import java.util.Calendar;
 
 public class AnnualInterest extends com.example.dpp.Interest {
-    public AnnualInterest(int discRate, double debt, Calendar pmtDate, double initialDebt){
+    public AnnualInterest(String name, int discRate, double debt, Calendar pmtDate, double initialDebt){
         this.discRate = discRate;
+        this.name = name;
         this.debt = debt;
         this.pmtDue = pmtDate;
         this.debtStart = (Calendar) pmtDate.clone();
@@ -18,20 +21,23 @@ public class AnnualInterest extends com.example.dpp.Interest {
         }
     }
 
-    public void updateDebtAndPmtDue(){
+    public void updateDebtAndPmtDue(Context context){
         Calendar today = Calendar.getInstance();
-        Calendar newPmtDue = (Calendar) pmtDue.clone();
-        while (today.compareTo(newPmtDue) >= 0) {
-            updateDebt();
-            newPmtDue.add(Calendar.YEAR, 1);
+//        Calendar newPmtDue = (Calendar) pmtDue.clone();
+        while (today.compareTo(pmtDue) >= 0) {
+            updateDebt(context);
+            pmtDue.add(Calendar.YEAR, 1);
         }
-        pmtDue = newPmtDue;
+//        pmtDue = newPmtDue;
     }
     @Override
-    public double updateDebt() {
+    public double updateDebt(Context context) {
         Calendar today = Calendar.getInstance();
         if (today.compareTo(pmtDue) >= 0){
+            double interest = this.debt * (this.discRate/100.0);
             this.debt = this.debt * (this.discRate/100.0 + 1);
+            DBCFHelper dbcfHelper = new DBCFHelper(context);
+            dbcfHelper.writeRow(name, interest, debt, pmtDue, true);
         }
         return debt;
     }

@@ -192,16 +192,16 @@ public class NewAccount extends Fragment {
                     debt = 0;
                 }
 
-                MainActivity.accounts.addNode(new Account(name));
+                MainActivity.accounts.addNode(new AccountModel(name));
 
                 switch (interestPlan.getSelectedItem().toString()){
                     case "Simple Interest":
                         initialDateObj.add(Calendar.YEAR, 1);
-                        MainActivity.accounts.findAccount(name).setInterestPlan(new SimpleInterest(discRate, debt, initialDateObj, -1));
+                        MainActivity.accounts.findAccount(name).setInterestPlan(new SimpleInterest(name, discRate, debt, initialDateObj, -1));
                         break;
                     case "Annually Compounded Interest":
                         initialDateObj.add(Calendar.YEAR, 1);
-                        MainActivity.accounts.findAccount(name).setInterestPlan(new AnnualInterest(discRate, debt, initialDateObj, -1));
+                        MainActivity.accounts.findAccount(name).setInterestPlan(new AnnualInterest(name, discRate, debt, initialDateObj, -1));
                         break;
                     case "Monthly Compounded Interest":
                         //TODO
@@ -218,6 +218,9 @@ public class NewAccount extends Fragment {
 
                 DBAccHelper dbAccHelper = new DBAccHelper(getActivity());
                 dbAccHelper.writeRow(MainActivity.accounts.findAccount(name));
+
+                DBCFHelper dbcfHelper = new DBCFHelper(getActivity());
+                dbcfHelper.writeRow(name, debt, debt, MainActivity.accounts.findAccount(name).interestPlan.getDebtStart(), false);
 
                 SharedPreferences sharedPreference = getActivity().getSharedPreferences("Account", Context.MODE_PRIVATE);
                 SharedPreferences.Editor SPEditor = sharedPreference.edit();

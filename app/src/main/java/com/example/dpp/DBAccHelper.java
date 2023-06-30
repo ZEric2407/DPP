@@ -42,7 +42,7 @@ public class DBAccHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean writeRow(Account acc){
+    public boolean writeRow(AccountModel acc){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -61,8 +61,8 @@ public class DBAccHelper extends SQLiteOpenHelper {
         return insert == 1;
     }
 
-    public ArrayList<Account> retrieveAllAccounts() throws ParseException {
-        ArrayList<Account> lst = new ArrayList<>();
+    public ArrayList<AccountModel> retrieveAllAccounts() throws ParseException {
+        ArrayList<AccountModel> lst = new ArrayList<>();
         String query = "SELECT * FROM " + account_table;
         SQLiteDatabase db = getReadableDatabase();
 
@@ -82,13 +82,13 @@ public class DBAccHelper extends SQLiteOpenHelper {
 
                 double initDebt = cursor.getDouble(6);
 
-                Account newAcc = new Account(acc_name);
+                AccountModel newAcc = new AccountModel(acc_name);
                 switch (plan){
                     case "Annual Interest":
-                        newAcc.interestPlan = new AnnualInterest(rate, debt, pmtDue, initDebt);
+                        newAcc.interestPlan = new AnnualInterest(acc_name, rate, debt, pmtDue, initDebt);
                         break;
                     case "Simple Interest":
-                        newAcc.interestPlan = new SimpleInterest(rate, debt, pmtDue, initDebt);
+                        newAcc.interestPlan = new SimpleInterest(acc_name, rate, debt, pmtDue, initDebt);
                         break;
                     default:
                         throw new IllegalArgumentException("Unimplemented Interest Plan");
