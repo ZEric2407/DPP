@@ -24,6 +24,7 @@ public class DBAccHelper extends SQLiteOpenHelper {
     private static final String rate = "Discount_Rate";
     private static final String pmt_due = "Payment_Due_Date";
     private static final String init_debt = "Initial_Debt";
+    private static final String debt_start = "Start_Date";
 
     public DBAccHelper(@Nullable Context context) {
         super(context, "accounts.db", null, 1);
@@ -33,7 +34,7 @@ public class DBAccHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String CreateQuery = "CREATE TABLE " + account_table + "( " + account_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + account_name + " TEXT, " + interest_plan + " TEXT, " + debt + " REAL, " +
-                rate + " INTEGER, " + pmt_due + " TEXT, " + init_debt + " REAL) ";
+                rate + " INTEGER, " + pmt_due + " TEXT, " + init_debt + " REAL, " + debt_start + " TEXT)";
         sqLiteDatabase.execSQL(CreateQuery);
     }
 
@@ -55,6 +56,7 @@ public class DBAccHelper extends SQLiteOpenHelper {
         cv.put(rate, acc.interestPlan.getDiscRate());
         cv.put(pmt_due, sdf.format(acc.interestPlan.getPmtDue().getTime()));
         cv.put(init_debt, acc.interestPlan.getInitialDebt());
+        cv.put(debt_start, sdf.format(acc.interestPlan.getDebtStart().getTime()));
 
         long insert = db.insert(account_table, null, cv);
 
@@ -79,16 +81,18 @@ public class DBAccHelper extends SQLiteOpenHelper {
                 SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.CANADA);
                 Calendar pmtDue = Calendar.getInstance();
                 pmtDue.setTime(sdf.parse(cursor.getString(5)));
+                Calendar debtStart = Calendar.getInstance();
+                debtStart.setTime(sdf.parse(cursor.getString(7)));
 
                 double initDebt = cursor.getDouble(6);
 
                 AccountModel newAcc = new AccountModel(acc_name);
                 switch (plan){
                     case "Annual Interest":
-                        newAcc.interestPlan = new AnnualInterest(acc_name, rate, debt, pmtDue, initDebt);
+                        newAcc.interestPlan = new AnnualInterest(acc_name, rate, debt, pmtDue, initDebt, debtStart);
                         break;
                     case "Simple Interest":
-                        newAcc.interestPlan = new SimpleInterest(acc_name, rate, debt, pmtDue, initDebt);
+                        newAcc.interestPlan = new SimpleInterest(acc_name, rate, debt, pmtDue, initDebt, debtStart);
                         break;
                     default:
                         throw new IllegalArgumentException("Unimplemented Interest Plan");

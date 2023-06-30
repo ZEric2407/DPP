@@ -7,13 +7,17 @@ import androidx.annotation.Nullable;
 import java.util.Calendar;
 
 public class AnnualInterest extends com.example.dpp.Interest {
-    public AnnualInterest(String name, int discRate, double debt, Calendar pmtDate, double initialDebt){
+    public AnnualInterest(String name, int discRate, double debt, Calendar pmtDate, double initialDebt, @Nullable Calendar debtStart){
         this.discRate = discRate;
         this.name = name;
         this.debt = debt;
         this.pmtDue = pmtDate;
-        this.debtStart = (Calendar) pmtDate.clone();
-        this.debtStart.add(Calendar.YEAR, -1);
+        if (debtStart == null) {
+            this.debtStart = (Calendar) pmtDate.clone();
+            this.debtStart.add(Calendar.YEAR, -1);
+        } else {
+            this.debtStart = debtStart;
+        }
         if (initialDebt == -1){
             this.initialDebt = debt;
         } else {

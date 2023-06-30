@@ -105,6 +105,8 @@ public class AccountCharts extends Fragment {
             vals.add(new Entry(transaction.getDate().getTimeInMillis()/1000f, debt));
         }
 
+        vals.add(new Entry(Calendar.getInstance().getTimeInMillis()/1000f, (float) currAcc.interestPlan.getDebt()));
+
         LineDataSet dataSet = new LineDataSet(vals, "Debt History");
 
         LineData lineData = new LineData(dataSet);

@@ -197,11 +197,11 @@ public class NewAccount extends Fragment {
                 switch (interestPlan.getSelectedItem().toString()){
                     case "Simple Interest":
                         initialDateObj.add(Calendar.YEAR, 1);
-                        MainActivity.accounts.findAccount(name).setInterestPlan(new SimpleInterest(name, discRate, debt, initialDateObj, -1));
+                        MainActivity.accounts.findAccount(name).setInterestPlan(new SimpleInterest(name, discRate, debt, initialDateObj, -1, null));
                         break;
                     case "Annually Compounded Interest":
                         initialDateObj.add(Calendar.YEAR, 1);
-                        MainActivity.accounts.findAccount(name).setInterestPlan(new AnnualInterest(name, discRate, debt, initialDateObj, -1));
+                        MainActivity.accounts.findAccount(name).setInterestPlan(new AnnualInterest(name, discRate, debt, initialDateObj, -1, null));
                         break;
                     case "Monthly Compounded Interest":
                         //TODO
