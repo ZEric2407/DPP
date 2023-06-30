@@ -10,6 +10,8 @@ public class SimpleInterest extends Interest{
         this.name = name;
         this.debt = debt;
         this.pmtDue = pmtDate;
+        this.debtStart = (Calendar) pmtDate.clone();
+        this.debtStart.add(Calendar.YEAR, -1);
 
         if (initialDebt == -1){
             this.initialDebt = debt;
@@ -21,7 +23,7 @@ public class SimpleInterest extends Interest{
     public double updateDebt(Context context) {
         double interest = initialDebt * (discRate/100.0);
         debt += initialDebt * (discRate/100.0);
-        DBCFHelper dbcfHelper = new DBCFHelper(null);
+        DBCFHelper dbcfHelper = new DBCFHelper(context);
         dbcfHelper.writeRow(name, interest, debt, pmtDue, true);
 
         return debt;

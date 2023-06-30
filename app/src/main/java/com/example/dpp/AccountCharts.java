@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -108,8 +109,15 @@ public class AccountCharts extends Fragment {
 
         LineData lineData = new LineData(dataSet);
         debtChart.setData(lineData);
+
+        Description description = new Description();
+        description.setText("Date");
+        debtChart.setDescription(description);
+
+        debtChart.setMarker(new DebtChartMarker(this.getActivity(), R.layout.chart_marker));
         debtChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         debtChart.getXAxis().setValueFormatter(new GraphDateFormatter());
+        debtChart.setPinchZoom(true);
         debtChart.invalidate();
 
     }
