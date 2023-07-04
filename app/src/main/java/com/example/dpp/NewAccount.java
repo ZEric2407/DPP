@@ -113,8 +113,8 @@ public class NewAccount extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!charSequence.toString().equals("") && Integer.parseInt(charSequence.toString()) > 60){
-                    interestRate.setText("60");
+                if (!charSequence.toString().equals("") && Integer.parseInt(charSequence.toString()) > 100){
+                    interestRate.setText("100");
                 }
             }
 
@@ -203,16 +203,13 @@ public class NewAccount extends Fragment {
                         initialDateObj.add(Calendar.YEAR, 1);
                         MainActivity.accounts.findAccount(name).setInterestPlan(new AnnualInterest(name, discRate, debt, initialDateObj, -1, null));
                         break;
-                    case "Monthly Compounded Interest":
-                        //TODO
+                    case "Semi-Annually Compounded Interest":
+                        initialDateObj.add(Calendar.MONTH, 6);
+                        MainActivity.accounts.findAccount(name).setInterestPlan(new SemiAnnualInterest(name, discRate, debt, initialDateObj, -1, null));
                         break;
-                    case "Weekly Compounded Interest":
-                        //TODO
-                        break;
-                    case "Daily Compounded Interest":
-                        //TODO
-                        break;
-                    case "Continuously Compounded Interest":
+                    case "Quarterly Compounded Interest":
+                        initialDateObj.add(Calendar.MONTH, 3);
+                        MainActivity.accounts.findAccount(name).setInterestPlan(new QuarterlyInterest(name, discRate, debt, initialDateObj, -1, null));
                         break;
                 }
 

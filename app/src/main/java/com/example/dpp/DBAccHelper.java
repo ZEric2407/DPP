@@ -94,6 +94,12 @@ public class DBAccHelper extends SQLiteOpenHelper {
                     case "Simple Interest":
                         newAcc.interestPlan = new SimpleInterest(acc_name, rate, debt, pmtDue, initDebt, debtStart);
                         break;
+                    case "Semi-Annual Interest":
+                        newAcc.interestPlan = new SemiAnnualInterest(acc_name, rate, debt, pmtDue, initDebt, debtStart);
+                        break;
+                    case "Quarterly Interest":
+                        newAcc.interestPlan = new QuarterlyInterest(acc_name, rate, debt, pmtDue, initDebt, debtStart);
+                        break;
                     default:
                         throw new IllegalArgumentException("Unimplemented Interest Plan");
                 }

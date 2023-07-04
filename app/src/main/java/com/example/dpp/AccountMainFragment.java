@@ -91,6 +91,32 @@ public class AccountMainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ((TextView) getView().findViewById(R.id.accName)).setText(currAccountModel.name);
 
+        String compounding;
+        int nominalRate;
+        Double EIR;
+        switch (currAccountModel.interestPlan.getInterestPlan()){
+            case "Annual Interest":
+                compounding = "Annually";
+                nominalRate = currAccountModel.interestPlan.getDiscRate();
+                EIR = (double) nominalRate;
+                break;
+            case "Semi-Annual Interest":
+                compounding = "Semi-Annually";
+                nominalRate = currAccountModel.interestPlan.getDiscRate() * 2;
+                EIR = ((SemiAnnualInterest) currAccountModel.interestPlan).computeEIR() * 100;
+                break;
+            case "Quarterly Interest":
+                compounding = "Quarterly";
+                nominalRate = currAccountModel.interestPlan.getDiscRate() * 4;
+                EIR = ((QuarterlyInterest) currAccountModel.interestPlan).computeEIR() * 100;
+                break;
+            default:
+                compounding = "N/A";
+                nominalRate = 0;
+                EIR = 0.0;
+                break;
+        }
+
         String debt = "Debt: $" + df.format(currAccountModel.interestPlan.getDebt());
         ((TextView) getView().findViewById(R.id.accDebt)).setText(debt);
 
@@ -99,7 +125,9 @@ public class AccountMainFragment extends Fragment {
         String pmtDue = "Next Payment: " + sdf.format(currAccountModel.interestPlan.getPmtDue().getTime());
         ((TextView) getView().findViewById(R.id.accNextPayment)).setText(pmtDue);
 
-        String interest = "Nominal Annual Interest Rate: " + Integer.toString(currAccountModel.interestPlan.getDiscRate()) + "%";
+        String interest = "Int. Rate: " + Integer.toString(currAccountModel.interestPlan.getDiscRate()) + "%"
+                + " Compounded " + compounding + "\n Nominal Annual Int. Rate: " + nominalRate +
+                "%\n Effective Int. Rate: " + df.format(EIR) + "%";
         ((TextView) getView().findViewById(R.id.accInterestRate)).setText(interest);
 
         String annuity = "Annuity: $" + df.format(currAccountModel.interestPlan.getAnnuity(5)) + "/Year over 5 years";
